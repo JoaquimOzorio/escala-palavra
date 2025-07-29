@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Escala de Palavras</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f3f3f3;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .card {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="mb-4 text-center">Escala de Palavras - Grupo dos Homens</h1>
+  <form method="POST" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <label class="form-label">Data Inicial</label>
+      <input type="date" class="form-control" name="data_inicio" required>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label">Dias de Escala</label>
+      <input type="number" class="form-control" name="dias" value="14" min="1">
+    </div>
+    <div class="col-md-4 align-self-end">
+      <button type="submit" class="btn btn-primary w-100">Gerar Escala</button>
+    </div>
+  </form>
+
+  {% if escala %}
+  <div class="card">
+    <div class="card-header">Escala Gerada</div>
+    <ul class="list-group list-group-flush" id="lista-escala">
+      {% for data, pessoa in escala.items() %}
+        <li class="list-group-item">
+          <strong>{{ data }}</strong>: {{ pessoa }}
+        </li>
+      {% endfor %}
+    </ul>
+    <div class="card-footer text-end">
+      <button class="btn btn-success" onclick="copiarEscala()">📋 Copiar para WhatsApp</button>
+    </div>
+  </div>
+{% endif %}
+
+<script>
+function copiarEscala() {
+  const itens = document.querySelectorAll("#lista-escala li");
+  let texto = "**Escala para os próximos dias**%0A";
+
+  itens.forEach(item => {
+    const conteudo = item.innerText.trim();
+    texto += conteudo + "%0A";
+  });
+
+  const link = "https://wa.me/?text=" + texto;
+  window.open(link, '_blank');
+}
+</script>
+
+</div>
+</body>
+</html>
